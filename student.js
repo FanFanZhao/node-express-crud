@@ -36,7 +36,7 @@ exports.save=function(info,callback){
 			return callback(err);
 		}
 		var fileData=JSON.parse(data).students;
-		info.id=fileData[fileData.length-1].id+1;
+		info.id=Number(fileData[fileData.length-1].id)+1;
 		fileData.push(info);
 		//写入文件
 		fs.writeFile(dbPath,JSON.stringify({"students":fileData}),function(err,writedata){
@@ -59,14 +59,11 @@ exports.updateById=function(student,callback){
 		var stu=students.find(function(item){
 			return item.id==student.id;
 		})
-		console.log(123)
-		console.log(student)
+
 		for(var key in student){
 			stu[key]=student[key];
 		}
 
-		var fileData=JSON.stringify(students);
-		console.log(students);
 		fs.writeFile(dbPath,JSON.stringify({students:students}),function(err,data){
 			if(err){
 				return callback(err);
@@ -78,12 +75,22 @@ exports.updateById=function(student,callback){
 /**
  * 删除学生
  */
-exports.delete=function(info,callback){
+exports.deleteById=function(id,callback){
 	fs.readFile(dbPath,'utf8',function(err,data){
 		if(err){
 			return callback(err);
 		}
-		var students=JSON.parse(data).students;
-		
+		var fileData=JSON.parse(data).students;
+		var index=fileData.findIndex(function(item){
+			return parseInt(item.id)==parseInt(id);
+		})
+		console.log(index)
+		fileData.splice(index,1);
+		console.log(fileData)
+		fs.writeFile(dbPath,JSON.stringify({students:fileData}),function(err,data){
+			if(err){
+				return callback(err)
+			}
+		})		
 	})
 }

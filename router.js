@@ -28,12 +28,10 @@ router.get('/students/new/',function(req,res){
 	res.render('new.html')
 })
 router.post('/students/new/',function(req,res){
-	console.log(req.body);
 	Students.save(req.body,function(err,data){
 		if(err){
 			return err.status(500).send('Server is error...')
 		}
-		console.log(data);
 		res.redirect('/students/')
 	})
 })
@@ -61,6 +59,11 @@ router.post('/students/edit',function(req,res){
 })
 //删除数据
 router.get('/students/delete',function(req,res){
-	var data=req.query;
+	Students.deleteById(req.query.id,function(err){
+		if(err){
+			return err.status(500).send('Server is error ....')
+		}
+		res.redirect('/students/')
+	})
 })
 module.exports=router;
