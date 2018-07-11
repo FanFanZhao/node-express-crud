@@ -13,5 +13,3 @@ app.use('/public/',express.static('./public/'));
 app.listen(3000,function(){
 	console.log('server is running at 3000');
 })
-
-
